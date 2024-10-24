@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login / Signup - Project Glassdoor</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: black;
+            font-family: Arial, sans-serif;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        header {
+            position: fixed;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            width: 100%;
+            box-sizing: border-box;
+            z-index: 2;
+            background-color: rgba(0, 0, 0, 0.8);
+            top: 0;
+        }
+
+        .logo {
+            font-size: 2.5em;
+            z-index: 1;
+            background: linear-gradient(90deg, #4A90E2, #FF69B4);
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .form-container {
+            margin-top: 100px; /* Space for fixed header */
+            background-color: #333;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0px 0px 20px rgba(255, 255, 255, 0.1);
+            width: 400px;
+            text-align: center;
+        }
+
+        .form-title {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .form-subtitle {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .form-container input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border: 1px solid white;
+            background-color: transparent;
+            color: white;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-container input:focus {
+            border-color: #4A90E2; /* Focus effect */
+            outline: none;
+        }
+
+        .form-container button {
+            background-color: black;
+            border: 2px solid white;
+            padding: 10px;
+            font-size: 1em;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+
+        .form-container button:hover {
+            background-color: white;
+            color: black;
+        }
+
+        .toggle-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .toggle-buttons button {
+            background-color: transparent;
+            border: 2px solid white;
+            color: white;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            border-radius: 5px;
+            width: 48%;
+        }
+
+        .toggle-buttons button.active {
+            background-color: white;
+            color: black;
+        }
+
+        .form-content {
+            display: none; /* Hide forms initially */
+        }
+
+        .form-content.active {
+            display: block; /* Show the active form */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">Project Glassdoor</div>
+    </header>
+
+    <div class="form-container">
+        <div class="form-title">Project Glassdoor</div>
+        <div class="form-subtitle">Share your confessions anonymously</div>
+
+        <div class="toggle-buttons">
+            <button id="loginBtn" class="active" onclick="showLogin()">Login</button>
+            <button id="signupBtn" onclick="showSignup()">Signup</button>
+        </div>
+
+        <div id="loginForm" class="form-content active">
+            <h2>Login</h2>
+            <form id="loginFormElement" onsubmit="handleLogin(event)">
+                <input type="email" id="loginEmail" placeholder="Email" required>
+                <input type="password" id="loginPassword" placeholder="Password" required>
+                <button type="submit">Login</button>
+            </form>
+            <p>Don't have an account? <a href="#" onclick="showSignup()" style="color: #4A90E2;">Sign up here</a></p>
+        </div>
+
+        <div id="signupForm" class="form-content">
+            <h2>Signup</h2>
+            <form>
+                <input type="text" placeholder="Username" required>
+                <input type="email" placeholder="Email" required>
+                <input type="password" placeholder="Password" required>
+                <button type="submit">Signup</button>
+            </form>
+            <p>Already have an account? <a href="#" onclick="showLogin()" style="color: #4A90E2;">Login here</a></p>
+        </div>
+    </div>
+
+    <script>
+        function showLogin() {
+            document.getElementById("loginForm").classList.add("active");
+            document.getElementById("signupForm").classList.remove("active");
+            document.getElementById("loginBtn").classList.add("active");
+            document.getElementById("signupBtn").classList.remove("active");
+        }
+
+        function showSignup() {
+            document.getElementById("loginForm").classList.remove("active");
+            document.getElementById("signupForm").classList.add("active");
+            document.getElementById("signupBtn").classList.add("active");
+            document.getElementById("loginBtn").classList.remove("active");
+        }
+
+        async function handleLogin(event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            const email = document.getElementById("loginEmail").value;
+            const password = document.getElementById("loginPassword").value;
+
+            try {
+                const response = await fetch('http://localhost:3000/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alert(`Welcome, ${data.username}!`); // Handle successful login (e.g., redirect to dashboard)
+                    // Redirect to another page or show a dashboard
+                } else {
+                    alert(data.message); // Show error message
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while logging in.');
+            }
+        }
+
+        // Initialize to show login form on load
+        showLogin();
+    </script>
+</body>
+</html>

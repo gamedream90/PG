@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tell Your Story - Project Glassdoor</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: black;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        header {
+            position: fixed;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            width: 100%;
+            box-sizing: border-box;
+            z-index: 2;
+            background-color: rgba(0, 0, 0, 0.8);
+            top: 0;
+        }
+
+        .logo {
+            font-size: 2.5em;
+            z-index: 1;
+            background: linear-gradient(90deg, #4A90E2, #FF69B4);
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .header-buttons {
+            display: flex;
+            gap: 15px;
+            z-index: 2;
+        }
+
+        .header-buttons .btn {
+            background-color: black;
+            border: 2px solid white;
+            padding: 10px 25px;
+            font-size: 1em;
+            color: white;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            font-family: inherit;
+        }
+
+        .header-buttons .btn:hover {
+            background-color: white;
+            color: black;
+            transform: scale(1.05);
+        }
+
+        .confession-container {
+            margin-top: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: calc(100vh - 100px);
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .confession-card {
+            background-color: #222;
+            /* Solid black background for the form */
+            padding: 40px 60px;
+            border-radius: 15px;
+            width: 1000px;
+            max-width: 1200px;
+            box-shadow: 0px 0px 20px rgba(255, 255, 255, 0.1);
+            /* Soft white shadow */
+            box-sizing: border-box;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .confession-card h1 {
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-align: center;
+            color: white;
+            /* White heading */
+        }
+
+        .confession-card label {
+            margin-top: 20px;
+            font-weight: bold;
+            font-size: 1.2em;
+            color: white;
+            /* White labels */
+        }
+
+        .confession-card input,
+        .confession-card textarea,
+        .confession-card select {
+            width: 100%;
+            padding: 15px;
+            margin-top: 10px;
+            border: 2px solid grey;
+            border-radius: 10px;
+            background-color: black;
+            color: white;
+            /* White text */
+            font-size: 1.2em;
+            transition: border 0.3s ease, background-color 0.3s ease;
+        }
+
+        .confession-card input:focus,
+        .confession-card textarea:focus,
+        .confession-card select:focus {
+            border: 2px solid white;
+            /* Maintain white border on focus */
+            background-color: #333;
+            /* Darker grey background on focus */
+            outline: none;
+        }
+
+        .confession-card textarea {
+            resize: vertical;
+            height: 250px;
+            max-length: 1500px;
+            /* Max character limit */
+        }
+
+        /* Align the submit button with other buttons on the page */
+        .confession-card button[type="submit"] {
+            background-color: black;
+            border: 2px solid white;
+            color: white;
+            padding: 10px 25px;
+            font-size: 1em;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            font-family: inherit;
+            margin: 30px auto 0 auto;
+            /* Center-align the button */
+            display: block;
+        }
+
+        .confession-card button[type="submit"]:hover {
+            background-color: white;
+            color: black;
+            transform: scale(1.05);
+        }
+
+        #response-message {
+            margin-top: 15px;
+            font-size: 1em;
+            text-align: center;
+            color: white;
+            /* White response message */
+        }
+
+        @media (max-width: 768px) {
+            .confession-container {
+                margin-top: 20px;
+            }
+
+            .confession-card {
+                width: 90%;
+                padding: 20px;
+            }
+
+            .logo {
+                font-size: 1.5em;
+            }
+
+            .header-buttons .btn {
+                padding: 8px 15px;
+                font-size: 0.9em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-buttons .btn {
+                padding: 6px 10px;
+                font-size: 0.8em;
+            }
+
+            .logo {
+                font-size: 1.2em;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo">Project Glassdoor</div>
+        <nav class="header-buttons">
+            <button class="btn" onclick="window.location.href='confessions.html'">View Confessions</button>
+            <button class="btn" onclick="window.location.href='index.html'">Home</button>
+        </nav>
+    </header>
+
+    <main>
+        <div class="confession-container">
+            <div class="confession-card">
+                <h1>Share Your Confession</h1>
+                <form id="confession-form">
+                    <div>
+                        <label for="title">Title:</label>
+                        <input type="text" id="title" name="title" required>
+                    </div>
+                    <div>
+                        <label for="body">Confession:</label>
+                        <textarea id="body" name="body" rows="5" maxlength="1500" required></textarea>
+                    </div>
+                    <div>
+                        <label for="tags">Select a Tag:</label>
+                        <select id="tags" name="tags" required>
+                            <option value="" disabled selected>Select a tag</option>
+                            <option value="love">Love</option>
+                            <option value="guilt">Guilt</option>
+                            <option value="secrets">Secrets</option>
+                            <option value="escapism">Escapism</option>
+                            <option value="friendship">Friendship</option>
+                        </select>
+                    </div>
+                    <button type="submit">Submit Confession</button>
+                </form>
+
+                <div id="response-message"></div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.getElementById('confession-form').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const title = document.getElementById('title').value;
+            const body = document.getElementById('body').value;
+            const tags = document.getElementById('tags').value;
+            const responseMessage = document.getElementById('response-message');
+
+            // Validation for minimum word count (150 words)
+            const wordCount = body.trim().split(/\s+/).length;
+            if (wordCount < 150) {
+                responseMessage.innerText = 'Confession must be at least 150 words long.';
+                return;
+            }
+
+            const confessionData = {
+                title: title,
+                body: body,
+                tags: [tags],
+                reactions: {
+                    love: 0,
+                    sad: 0,
+                    laugh: 0,
+                    userReactions: []
+                }
+            };
+
+            try {
+                const response = await fetch('http://localhost:3000/confessions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(confessionData),
+                });
+
+                if (response.ok) {
+                    responseMessage.innerText = 'Confession submitted successfully!';
+                    document.getElementById('confession-form').reset();
+                } else {
+                    responseMessage.innerText = 'Error submitting confession. Please try again.';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                responseMessage.innerText = 'Error submitting confession. Please try again.';
+            }
+        });
+    </script>
+</body>
+
+</html>

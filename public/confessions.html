@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confessions - Project Glassdoor</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: black;
+            font-family: Arial, sans-serif;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            overflow: hidden;
+            /* Prevent scrollbars */
+        }
+
+        header {
+            position: fixed;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            width: 100%;
+            box-sizing: border-box;
+            z-index: 2;
+            background-color: rgba(0, 0, 0, 0.8);
+            top: 0;
+        }
+
+        .logo {
+            font-size: 2.5em;
+            z-index: 1;
+            background: linear-gradient(90deg, #4A90E2, #FF69B4);
+            -webkit-background-clip: text;
+            color: transparent;
+            /* outline: 2px solid white;
+            outline-offset: 5px;
+            box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.5); */
+        }
+
+        .floating-emoji {
+            position: fixed;
+            font-size: 40px;
+            /* Size of the emoji */
+            animation: float 1s forwards;
+            pointer-events: none;
+            /* Prevent interaction */
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-100px);
+                /* Change the distance as needed */
+                opacity: 0;
+            }
+        }
+
+
+        .header-buttons {
+            display: flex;
+            gap: 15px;
+            z-index: 2;
+        }
+
+        .header-buttons .btn {
+            background-color: black;
+            border: 2px solid white;
+            padding: 10px 25px;
+            font-size: 1em;
+            color: white;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .header-buttons .btn:hover {
+            background-color: white;
+            color: black;
+            transform: scale(1.05);
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: black;
+            padding: 20px;
+            box-sizing: border-box;
+            position: fixed;
+            left: 0;
+            top: 60px;
+            /* Below the header */
+            z-index: 1;
+            border-right: 1px solid rgba(255, 255, 255, 0.2);
+            height: calc(100vh - 60px);
+            transition: transform 0.3s ease;
+            transform: translateX(0);
+            /* Show sidebar */
+        }
+
+        .sidebar.hidden {
+            transform: translateX(-100%);
+            /* Hide sidebar */
+        }
+
+        .sidebar h3 {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar ul li {
+            margin-bottom: 15px;
+        }
+
+        .sidebar ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.2em;
+        }
+
+        .sidebar ul li a:hover {
+            text-decoration: underline;
+        }
+
+        .confession-container {
+            margin-left: 270px;
+            padding-top: 80px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: calc(100vh - 80px);
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            /* Prevent scrollbars */
+        }
+
+        .confession-card {
+            background-color: #333;
+            padding: 40px;
+            /* Increased padding */
+            border-radius: 15px;
+            width: 60%;
+            /* Adjusted width */
+            max-width: 900px;
+            box-shadow: 0px 0px 20px rgba(255, 255, 255, 0.1);
+            box-sizing: border-box;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .confession-header {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .confession-body {
+            font-size: 1.2em;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+
+        .confession-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .reaction-count {
+            font-size: 0.9em;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .tags {
+            display: flex;
+            gap: 10px;
+        }
+
+        .tags span {
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 0.9em;
+        }
+
+        .reactions {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .reactions img {
+            width: 40px;
+            height: 40px;
+            margin: 0 10px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .reactions img:hover {
+            transform: scale(1.2);
+        }
+
+        /* Navigation Buttons */
+        .nav-button {
+            background-color: black;
+            border: 2px solid white;
+            color: white;
+            padding: 10px 20px;
+            font-size: 1.5em;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            border-radius: 10px;
+            margin: 0 10px;
+            /* Margin to space between card and buttons */
+        }
+
+        .nav-button:hover {
+            background-color: white;
+            color: black;
+        }
+
+        /* Toggle Button */
+        .toggle-sidebar {
+            background-color: black;
+            border: 2px solid white;
+            color: white;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            display: none;
+            /* Hidden by default */
+            margin-left: 15px;
+            /* Space between buttons */
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: absolute;
+                transform: translateX(-100%);
+                /* Hide sidebar */
+            }
+
+            .confession-container {
+                margin-left: 0;
+                padding: 10px;
+            }
+
+            .confession-card {
+                width: 90%;
+                /* Wider on smaller screens */
+            }
+
+            .header-buttons .btn {
+                padding: 8px 15px;
+                font-size: 0.9em;
+            }
+
+            .logo {
+                font-size: 1.5em;
+            }
+
+            .toggle-sidebar {
+                display: block;
+                /* Show toggle button on smaller screens */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-buttons .btn {
+                padding: 6px 10px;
+                font-size: 0.8em;
+            }
+
+            .logo {
+                font-size: 1.2em;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <div id="alertBox" class="alert alert-primary" role="alert" style="display: none;">
+        <span id="alertMessage"></span>
+    </div>
+
+    <header>
+        <div class="logo">Project Glassdoor</div>
+        <div class="header-buttons">
+            <button class="btn" onclick="window.location.href='tellyourstory.html'">Tell Your Story</button>
+            <button class="toggle-sidebar" onclick="toggleSidebar()">&#9776;</button>
+        </div>
+    </header>
+
+    <aside class="sidebar" id="sidebar">
+        <h3>Genres</h3>
+        <ul>
+            <li><a href="#" onclick="fetchConfessions('love')">Love</a></li>
+            <li><a href="#" onclick="fetchConfessions('guilt')">Guilt</a></li>
+            <li><a href="#" onclick="fetchConfessions('secrets')">Secrets</a></li>
+            <li><a href="#" onclick="fetchConfessions('escapism')">Escapism</a></li>
+            <li><a href="#" onclick="fetchConfessions('friendship')">Friendship</a></li>
+        </ul>
+    </aside>
+
+    <main class="confession-container">
+        <button class="nav-button" onclick="prevCard()">&#8249;</button>
+        <div class="confession-card" id="confession-card">
+            <div class="confession-header" id="confession-title"></div>
+            <div class="confession-body" id="confession-body"></div>
+            <div class="confession-footer">
+                <div class="reaction-count" id="reaction-count"></div>
+                <div class="tags" id="confession-tags"></div>
+            </div>
+            <div class="reactions">
+                <button
+                    onclick="showFloatingEmoji('❤️', event); reactToConfession(confessions[currentIndex]._id, 'love')">❤️
+                    Love</button>
+                <button
+                    onclick="showFloatingEmoji('😢', event); reactToConfession(confessions[currentIndex]._id, 'sad')">😢
+                    Sad</button>
+                <button
+                    onclick="showFloatingEmoji('😂', event); reactToConfession(confessions[currentIndex]._id, 'laugh')">😂
+                    Laugh</button>
+            </div>
+
+        </div>
+        <button class="nav-button" onclick="nextCard()">&#8250;</button>
+    </main>
+
+    <script>
+        let confessions = [];
+        let currentIndex = 0;
+
+        function setCookie(name, value, days) {
+            const d = new Date();
+            d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
+            const expires = "expires=" + d.toUTCString();
+            document.cookie = name + "=" + value + ";" + expires + ";path=/";
+        }
+
+        function getCookie(name) {
+            const nameEQ = name + "=";
+            const ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null; // Return null if not found
+        }
+
+        function makeid(length) {
+            let result = '';
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            const charactersLength = characters.length;
+            let counter = 0;
+            while (counter < length) {
+                result += characters.charAt(Math.floor(Math.random() * charactersLength));
+                counter += 1;
+            }
+            return result;
+        }
+
+        setCookie('username', makeid(15), 30);
+        const username = getCookie('username'); // Retrieves the value of 'username'
+
+        console.log(username)
+
+
+        async function fetchConfessions(tag) {
+            try {
+                const response = await fetch(`/api/confessions/tag/${tag}`);
+                confessions = await response.json();
+                currentIndex = 0;
+                showCard(currentIndex);
+            } catch (error) {
+                console.error('Error fetching confessions:', error);
+            }
+        }
+
+        function showCard(index) {
+            const card = document.getElementById("confession-card");
+            card.querySelector("#confession-title").innerText = confessions[index].title;
+            card.querySelector("#confession-body").innerText = confessions[index].body;
+
+            const reactions = confessions[index].reactions;
+            card.querySelector("#reaction-count").innerHTML = `
+                <strong>Love:</strong> ${reactions.love} |
+                <strong>Sad:</strong> ${reactions.sad} |
+                <strong>Laugh:</strong> ${reactions.laugh}
+            `;
+            card.querySelector("#confession-tags").innerText = `Tags: ${confessions[index].tags.join(', ')}`;
+        }
+
+        function prevCard() {
+            currentIndex = (currentIndex === 0) ? confessions.length - 1 : currentIndex - 1;
+            showCard(currentIndex);
+        }
+
+        function nextCard() {
+            currentIndex = (currentIndex === confessions.length - 1) ? 0 : currentIndex + 1;
+            showCard(currentIndex);
+        }
+
+        async function fetchRandomConfessions() {
+            try {
+                const response = await fetch('/api/confessions/random');
+                const data = await response.json();
+                confessions = data.confessions;
+                currentIndex = 0;
+                showCard(currentIndex);
+            } catch (error) {
+                console.error('Error fetching random confessions:', error);
+            }
+        }
+
+        async function reactToConfession(confessionId, reactionType) {
+            const userId = getCookie('username');
+
+            try {
+                const response = await fetch(`/confessions/${confessionId}/reactions`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ reactionType, userId }),
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const updatedConfession = await response.json();
+                console.log('Reaction updated successfully:', updatedConfession);
+
+                // Update the current confession's reactions in the front end
+                confessions[currentIndex] = updatedConfession; // Update local confessions array
+                showCard(currentIndex); // Refresh the displayed card with updated reactions
+            } catch (error) {
+                const alertBox = document.getElementById('alertBox');
+                const alertMessage = document.getElementById('alertMessage');
+                alertMessage.innerText = "You have already reacted!"; // Display the error message
+                alertBox.style.display = 'block'; // Show the alert
+
+                setTimeout(() => {
+                    alertBox.style.display = 'none'; // Hide the alert
+                }, 3000);
+            }
+        }
+
+        function showFloatingEmoji(emoji, event) {
+            const emojiElement = document.createElement("div");
+            emojiElement.classList.add("floating-emoji");
+            emojiElement.innerText = emoji;
+
+            // Get the button's position to place the emoji
+            const rect = event.currentTarget.getBoundingClientRect();
+            emojiElement.style.left = `${event.clientX}px`;
+            emojiElement.style.top = `${rect.top + window.scrollY}px`; // Position it just above the button
+
+            document.body.appendChild(emojiElement);
+
+            // Remove the emoji element after the animation is done
+            emojiElement.addEventListener("animationend", () => {
+                emojiElement.remove();
+            });
+        }
+
+
+
+
+
+        // Initialize by fetching random confessions
+        fetchRandomConfessions();
+    </script>
+</body>
+
+</html>

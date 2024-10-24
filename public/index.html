@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat with Gemini</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: black;
+            font-family: Arial, sans-serif;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 5em;
+            /* Increased font size */
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #4A90E2, #FF69B4);
+            -webkit-background-clip: text;
+            color: transparent;
+            overflow: hidden;
+            white-space: nowrap;
+            border-right: 3px solid white;
+            /* Cursor effect */
+            max-width: 0;
+            /* Start with no width */
+            animation: typing 2.5s steps(16, end) forwards, blink-caret 0.75s step-end infinite;
+            /* Reduced duration to 2.5s */
+        }
+
+        @keyframes typing {
+            from {
+                max-width: 0;
+            }
+
+            /* Start with no text visible */
+            to {
+                max-width: 100%;
+            }
+
+            /* Reveal the entire text */
+        }
+
+        @keyframes blink-caret {
+
+            from,
+            to {
+                border-color: transparent;
+            }
+
+            50% {
+                border-right-color: white;
+            }
+        }
+
+        p {
+            font-size: 2em;
+            /* Increased font size */
+            margin-bottom: 30px;
+            color: rgba(255, 255, 255, 0.8);
+            opacity: 0;
+            /* Start hidden */
+            visibility: hidden;
+            /* Ensure it's not clickable */
+            transition: opacity 1s ease, visibility 1s ease;
+            /* Fade-in effect */
+        }
+
+        .btn {
+            background-color: black;
+            /* Black background */
+            border: 2px solid white;
+            /* White border */
+            padding: 15px 30px;
+            font-size: 1.5em;
+            /* Increased button font size */
+            color: white;
+            /* White text */
+            border-radius: 25px;
+            /* Rounded corners */
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            /* Animation on hover */
+            opacity: 0;
+            /* Start hidden */
+            visibility: hidden;
+            /* Ensure it's not clickable */
+        }
+
+        .btn.show {
+            opacity: 1;
+            /* Fade in effect */
+            visibility: visible;
+            /* Make it clickable */
+        }
+
+        p.show {
+            opacity: 1;
+            /* Fade in effect for paragraph */
+            visibility: visible;
+            /* Make it visible */
+        }
+
+        .btn:hover {
+            background-color: white;
+            /* Change to white on hover */
+            color: black;
+            /* Change text to black on hover */
+            transform: scale(1.05);
+            /* Slightly enlarge button on hover */
+        }
+
+        footer {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+            font-size: 1em;
+            /* Increased footer font size */
+            color: rgba(255, 255, 255, 0.6);
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <h1>Project Glassdoor</h1>
+        <p id="infoText">Talk all your heart out anonymously</p>
+        <button class="btn" id="startButton" onclick="window.location.href='confessions.html';">Get started</button>
+    </div>
+    <footer>
+       
+    </footer>
+
+    <script>
+        // Wait for the typing animation to finish before showing the paragraph and button
+        setTimeout(() => {
+            const button = document.getElementById('startButton');
+            const infoText = document.getElementById('infoText');
+            infoText.classList.add('show'); // Add the class to show the paragraph
+            button.classList.add('show'); // Add the class to show the button
+        }, 2500); // Match this time with the duration of the typing animation
+    </script>
+</body>
+
+</html>
